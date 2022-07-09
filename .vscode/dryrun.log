@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/truongnguyen/Desktop/CS-251-Blockchain-Technologies'
+make: Leaving directory `/Users/truongnguyen/Desktop/CS-251-Blockchain-Technologies'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+
