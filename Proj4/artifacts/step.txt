@@ -1,0 +1,47 @@
+1. Setup   
+    # npm install -g circom (npm install -g alex-ozdemir/circom#cs251)
+    # npm install -g snarkjs (npm install -g snarkjs@0.1.11)
+
+2. Create a working directory:
+    # mkdir factor
+    # cd factor
+
+3. Create a basic circuit:
+    # echo "
+    template Multiplier() {
+    signal private input a;
+    signal private input b;
+    signal output c;
+
+    c <== a*b;
+    }
+    component main = Multiplier();
+    " > multiplier.cicom
+
+4. Compile the circuit
+    # circom multiplier.cicom -o multiplier.json
+
+5. Print Info on the circuit
+    # snarkjs info -c multiplier.json
+
+6. Print raw constraints
+    # snarkjs printconstraints -c multiplier.json
+
+7. Setup: Once per circuit and generally done in a multiparty ceremony
+    # snarkjs setup -c multiplier.json --pk proving_key.json --vk verification_key.json --protocol groth
+
+8. Calculate the witness. (Run the circuit)
+    # echo "{\"a\": 3, \"b\": 11}" >in.json
+    # snarkjs calculatewitness -c multiplier.json -i in.json -w witness.json
+
+9. Generate the proof
+    # snarkjs proof -w witness.json --pk proving_key.json --pub pub.json --proof=proof.json
+
+10. Verify the proof
+    # snarkjs verify --vk verification_key.json --proof proof.json --pub pub.json
+
+11. Generate solidity smart contract to verify the proof
+    # snarkjs generateverifier --vk verification_key.json --verifier verifier.sol
+
+12. Generate the prepared call parameters of a proof to be verified with the smart contract
+    # snarkjs generatecall --proof proof.json --pub pub.json
